@@ -5,9 +5,7 @@ Created on 2015年5月17日
 
 '''
 import http.client
-import re
 from bs4 import BeautifulSoup
-from bs4.element import Tag
 
 httpClient = None
 colName = ['transactedDate','stockCode','stockName','transactedDetail','currentPrice',
@@ -68,7 +66,7 @@ def fetchPartOfDealingInfo(td,bdr):
 
 def fetchAllBigDealingInfo():
     try:
-        httpClient = http.client.HTTPConnection("data.eastmoney.com",80,timeout=30)
+        httpClient = http.client.HTTPConnection("data.eastmoney.com",80,timeout=60)
         httpClient.request('GET', '/dzjy/default.html')
         res = httpClient.getresponse()
         print (res.status,res.reason)
