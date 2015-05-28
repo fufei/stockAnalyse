@@ -43,7 +43,7 @@ class ExecutiveDealInfo():
 def fetchExecutiveDealInfo():
     try:
         httpClient = http.client.HTTPConnection("datainterface.eastmoney.com",80,timeout=60)
-        httpClient.request('GET', '/EM_DataCenter/JS.aspx?type=GG&sty=GGMX&p=1&ps=1000&js=(x)')
+        httpClient.request('GET', '/EM_DataCenter/JS.aspx?type=GG&sty=GGMX&p=1&ps=5000&js=(x)')
         res = httpClient.getresponse()
 #         print (res.status,res.reason)        
         if res.status == 200:

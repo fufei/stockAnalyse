@@ -35,9 +35,9 @@ class BigDealRecord():
             self.ratio = -1000000 #如果没有当前价格和成交价格，ratio设为大负值
     
     def toString(self):
-        s = '[股票代码：{0}，股票简称：{1}，当前价格：{2}，成交价格：{3}，成交量：{4}万股，成交金额：{5}万元,比率:{6}]，买家：{7}，卖家：{8}'
+        s = '[股票代码：{0}，股票简称：{1}，当前价格：{2}，成交价格：{3}，成交量：{4}万股，成交金额：{5}万元,比率:{6}]'
         s = s.format(self.stockCode,self.stockName,self.currentPrice,self.transactedPrice,
-                 self.transactedVolume,self.turnover,self.ratio,self.buyer,self.seller)
+                 self.transactedVolume,self.turnover,self.ratio)
         return s
         
 def fetchPartOfDealingInfo(td,bdr):
@@ -69,7 +69,6 @@ def fetchAllBigDealingInfo():
         httpClient = http.client.HTTPConnection("data.eastmoney.com",80,timeout=60)
         httpClient.request('GET', '/dzjy/default.html')
         res = httpClient.getresponse()
-#         print (res.status,res.reason)
         
         if res.status == 200:
             soup = BeautifulSoup(res.readall())
@@ -87,9 +86,7 @@ def fetchAllBigDealingInfo():
 #                     print(transactedDate)
                     bigDealInfo[transactedDate]=[]
                     td = td.nextSibling.nextSibling #两个nextSibling是为了跳过NavigableString对象
-                    if(transactedDate=='2015-05-12'):
-                        ss = 'dd'
-                        
+                       
                 if td.has_attr('rowspan'):
                     stockCode = td.text
                     bdr.stockCode = stockCode
