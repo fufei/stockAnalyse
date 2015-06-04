@@ -3,6 +3,8 @@ Created on 2015年5月17日
 
 @author: fufei
 '''
+from datetime import datetime
+from decimal import Decimal
 import string
 import time
 import urllib.request
@@ -68,4 +70,10 @@ def t():
     print(s)
     print(l)
 
-t()
+# t()
+ 
+s = Decimal('inf')
+print("sdfsdf"+str(123)+"sdfsf")
+for i in range(1,11):
+    print(i*10)
+

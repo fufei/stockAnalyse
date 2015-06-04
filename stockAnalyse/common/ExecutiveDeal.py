@@ -7,8 +7,6 @@ Created on 2015年5月27日
 import http.client
 from urllib.parse import unquote
 
-from bs4 import BeautifulSoup
-
 httpClient = None
 edInfo = [] #高管增减持信息
 class ExecutiveDealInfo():
@@ -33,6 +31,7 @@ class ExecutiveDealInfo():
         self.executiveName = '' #董监高姓名
         self.position = ''#职务
         self.relation = ''#变动人与董监高关系
+        self.stockCode2 = ''#带后缀".SH"和".SZ"的股票代码
     
     def toString(self):
         s = '[交易日期：{6}，股票代码：{0}，股票简称：{1}，变动股数：{2}，成交价格：{3}，变动金额：{4}元，变动比率:{5}]'
@@ -43,23 +42,23 @@ class ExecutiveDealInfo():
 def fetchExecutiveDealInfo():
     try:
         httpClient = http.client.HTTPConnection("datainterface.eastmoney.com",80,timeout=60)
-        httpClient.request('GET', '/EM_DataCenter/JS.aspx?type=GG&sty=GGMX&p=1&ps=5000&js=(x)')
+        httpClient.request('GET', '/EM_DataCenter/JS.aspx?type=GG&sty=GGMX&p=1&ps=2000&js=(x)')
         res = httpClient.getresponse()
 #         print (res.status,res.reason)        
         if res.status == 200:
             data = res.readall().decode(encoding="utf-8", errors="strict")
             l = data.split('"')
-            l = [x for x in l if (x!='' and x!=',')]
-#             print(l)
+            l = [x for x in l if (x!='' and x!=',')]#去掉分割字符后生成的''和','
             #获取高管增减持信息
             for e in l:            
                 edi = ExecutiveDealInfo()
                 l2 = e.split(",")
-                l2 = [x for x in l2 if (x!='' and x!=',')]
                 edi.ratio = float(l2[0])
-                edi.transactedUser = l2[1]
+                edi.executiveName = l2[1]
                 edi.stockCode = l2[2]
-                edi.executiveName = l2[3]
+                if('002219'==edi.stockCode):
+                    print(l2,l2[8])
+                edi.transactedUser = l2[3]
                 edi.stockType = l2[4]
                 edi.transactedDate = l2[5]
                 edi.transactedVolume = int(l2[6])
@@ -69,9 +68,10 @@ def fetchExecutiveDealInfo():
                 edi.relation = l2[10]
                 edi.reason = l2[12]
                 edi.turnover = float(l2[13])
+                edi.position = l2[14]
+                edi.stockCode2 = l2[15]
                 
                 edInfo.append(edi)
-#                 print(edi.toString())
     except Exception as err:
         print (err)
     finally:

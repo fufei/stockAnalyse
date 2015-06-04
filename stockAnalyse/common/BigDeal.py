@@ -67,7 +67,7 @@ def fetchPartOfDealingInfo(td,bdr):
 def fetchAllBigDealingInfo():
     try:
         httpClient = http.client.HTTPConnection("data.eastmoney.com",80,timeout=60)
-        httpClient.request('GET', '/dzjy/default.html')
+        httpClient.request('GET', '/dzjy/default.html')#default.html
         res = httpClient.getresponse()
         
         if res.status == 200:
@@ -126,4 +126,4 @@ def findTargetStock(ratio,volume):
                 print(bigDealRecord.toString())           
 
 fetchAllBigDealingInfo()
-findTargetStock(0.01,1000)
+findTargetStock(0,1000)
